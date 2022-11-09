@@ -59,7 +59,8 @@ if __name__ == '__main__':
     cbda = SinGen("CBDA")
 
     sim = Simulator(cbda)
-    sim.run(11)
+    sim.setDeltaT(0.1)
+    sim.run(10)
 
     data = cbda.getSignalHistory('OUT1')
     x, y = [x for x, _ in data], [y for _, y in data]
