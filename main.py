@@ -1,11 +1,11 @@
-'''from CBD.Core import *
+from CBD.Core import *
 from CBD.lib.std import TimeBlock, GenericBlock, IntegratorBlock, DerivatorBlock
 from CBD.lib.endpoints import SignalCollectorBlock
 from CBD.simulator import *
-
 from CBD.realtime.plotting import PlotManager, LinePlot, follow
 from CBD.simulator import Simulator
 import matplotlib.pyplot as plt
+
 
 class CBDA(CBD):
     def __init__(self, name="CBDA"):
@@ -14,22 +14,26 @@ class CBDA(CBD):
         # Create the blocks
         self.addBlock(TimeBlock("time"))
         self.addBlock(IntegratorBlock("integrator"))
+        self.addBlock(ConstantBlock(block_name="ic", value=0))
 
         # Connect the blocks
         self.addConnection("time", "integrator")
+        self.addConnection("ic", "integrator", input_port_name="IC")
         self.addConnection("integrator", "Xa")
 
-if __name__ == '__main__':
-    cbda = CBDA("cbda")
+class CBDB(CBD):
+    def __init__(self, name="CBDA"):
+        CBD.__init__(self, name, input_ports=[""], output_ports=["Xa"])
 
-    sim = Simulator(cbda)
-    sim.run(10.0)
+        # Create the blocks
+        self.addBlock(TimeBlock("time"))
+        self.addBlock(DerivatorBlock("integrator"))
+        self.addBlock(ConstantBlock(block_name="ic", value=0))
 
-
-'''
-
-from CBD.Core import *   # To prevent circular dependency
-from CBD.lib.std import TimeBlock, GenericBlock
+        # Connect the blocks
+        self.addConnection("time", "integrator")
+        self.addConnection("ic", "integrator", input_port_name="IC")
+        self.addConnection("integrator", "Xa")
 
 class SinGen(CBD):
     def __init__(self, name="SinGen"):
@@ -51,21 +55,27 @@ class SinGen(CBD):
         self.addConnection("sin", "OUT1", output_port_name='OUT1')
 
 
-sinGen = SinGen("SinGen")
+if __name__ == '__main__':
+    cbda = SinGen("CBDA")
 
-from CBD.simulator import Simulator
+    sim = Simulator(cbda)
+    sim.run(11)
 
-sim = Simulator(sinGen)
+    data = cbda.getSignalHistory('OUT1')
+    x, y = [x for x, _ in data], [y for _, y in data]
 
-manager = PlotManager()
-manager.register("sin", sinGen.find('collector')[0], (fig, ax), LinePlot(color='red'))
-manager.connect('sin', 'update', lambda d, axis=ax: axis.set_xlim(follow(d[0], 10.0, lower_bound=0.0)))
+    print(x)
+    print(y)
+    plt.plot(x, y)
+    plt.xlabel("Time")
+    plt.ylabel("Value")
+    plt.show()
 
-# The termination time can be set as argument to the run call
-sim.run(20.0)
 
-data = sinGen.getSignalHistory('OUT1')
-x, y = [x for x, _ in data], [y for _, y in data]
 
-print(x)
-print(y)
+
+
+
+
+
+
