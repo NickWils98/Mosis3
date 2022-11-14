@@ -1,5 +1,5 @@
 from CBD.Core import *
-from CBD.lib.std import TimeBlock, GenericBlock, IntegratorBlock, DerivatorBlock
+from CBD.lib.std import *
 from CBD.lib.endpoints import SignalCollectorBlock
 from CBD.simulator import *
 from CBD.realtime.plotting import PlotManager, LinePlot, follow
@@ -22,7 +22,7 @@ class CBDA(CBD):
         self.addConnection("integrator", "OUT1")
 
 class CBDB(CBD):
-    def __init__(self, name="CBDA"):
+    def __init__(self, name="CBDB"):
         CBD.__init__(self, name, input_ports=[""], output_ports=["OUT1"])
 
         # Create the blocks
@@ -48,24 +48,30 @@ class SinGen(CBD):
         self.addConnection("sin", "OUT1", output_port_name='OUT1')
 
 class errorA(CBD):
-    def __init__(self, param1, param2,  name="CBDA"):
-        CBD.__init__(self, name, input_ports=["sinT", "Xa"], output_ports=["OUT1"])
-
-        # Create the blocks
+    def __init__(self,  name="ErrorA"):
+        CBD.__init__(self, name, input_ports=["Xa", "SinT"], output_ports=["OUT1"])
+        # Sin
+        # Add the 't' and "sin" parameter
         self.addBlock(TimeBlock("time"))
-        self.addBlock(DerivatorBlock("integrator"))
-        #self.addBlock(ConstantBlock(block_name="ic", value=0))
+        self.addBlock(IntegratorBlock("integrator"))
+        self.addBlock(ConstantBlock(block_name="ic", value=0))
 
-        # Connect the blocks
-        self.addConnection("sinT", "integrator")
-        self.addConnection("ic", "integrator")
+        self.addBlock(AdderBlock(block_name="minus"))
+        self.addBlock(InverterBlock(block_name="inverted"))
+
+        # Connect them together
+        self.addConnection("time", "sin", output_port_name='OUT1', input_port_name='IN1')
+        self.addConnection("ic", "integrator", input_port_name="IC")
+        self.addConnection("sin", "OUT1", output_port_name='OUT1')
+
+
         self.addConnection("integrator", "OUT1")
 
 def setUp(blockname):
     cbd = CBD(blockname)
     return cbd
 
-def run(cbd, num_steps=1, delta_t=1.0, ):
+def run(cbd, num_steps=1, delta_t=1.0):
     sim = Simulator(cbd)
     sim.setDeltaT(delta_t)
     sim.run(num_steps)
@@ -83,18 +89,23 @@ def simplePlot(x, y):
 
 if __name__ == '__main__':
     # CBDA
-    cbda = CBDA("CBDA")
+    cbda = CBDA()
     x, y = run(cbda, 10, 0.1)
     simplePlot(x, y)
 
     # CBDB
-    cbdb = CBDB("CBDA")
+    cbdb = CBDB()
     x, y = run(cbdb, 10, 0.1)
     simplePlot(x, y)
 
     # Sin(t)
-    sin = SinGen("SIN")
+    sin = SinGen()
     x, y = run(sin, 10, 0.1)
+    simplePlot(x, y)
+
+    # ErrorA
+    errA = errorA()
+    x, y = run(errA, 10, 0.1)
     simplePlot(x, y)
 
 
