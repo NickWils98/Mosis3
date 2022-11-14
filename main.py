@@ -55,21 +55,22 @@ class errorA(CBD):
         self.addBlock(CBDA)
         self.addBlock(SIN)
 
-        self.addBlock(TimeBlock("time"))
+        # self.addBlock(TimeBlock("time"))
         self.addBlock(IntegratorBlock("integrator"))
         self.addBlock(ConstantBlock(block_name="ic", value=0))
 
         self.addBlock(AdderBlock(block_name="minus"))
-        #self.addBlock(InverterBlock(block_name="inverted"))
+        # self.addBlock(InverterBlock(block_name="inverted"))
 
         # Connect them together
-        #self.addConnection("time", "integrator")
-        #self.addConnection("ic", "integrator", input_port_name="IC")
+        # self.addConnection("time", "integrator")
+        self.addConnection("ic", "integrator", input_port_name="IC")
 
-        self.addConnection("SinGen", "minus")
-        self.addConnection("CBDA", "minus")
-        #self.addConnection("minus", "integrator")
-        self.addConnection("minus", "OUT1")
+        self.addConnection("CBDA", "minus", input_port_name="IN1", output_port_name="OUT1")
+        self.addConnection("SinGen", "minus", input_port_name="IN2", output_port_name="OUT1")
+
+        self.addConnection("minus", "integrator", input_port_name="IN1", output_port_name="OUT1")
+        self.addConnection("integrator", "OUT1")
 
 
 
@@ -123,7 +124,9 @@ if __name__ == '__main__':
     simplePlot(x, y)
 
     # ErrorA
-    errA = errorA(cbda, sin)
+    errorA_cbda = CBDA()
+    errorA_singen = SinGen()
+    errA = errorA(errorA_cbda, errorA_singen)
     x, y = run(errA, 10, 0.1)
     simplePlot(x, y)
 
