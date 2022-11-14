@@ -48,24 +48,43 @@ class SinGen(CBD):
         self.addConnection("sin", "OUT1", output_port_name='OUT1')
 
 class errorA(CBD):
-    def __init__(self,  name="ErrorA"):
-        CBD.__init__(self, name, input_ports=["Xa", "SinT"], output_ports=["OUT1"])
+    def __init__(self, CBDA, SIN,  name="ErrorA"):
+        CBD.__init__(self, name, input_ports=[], output_ports=["OUT1"])
         # Sin
         # Add the 't' and "sin" parameter
+        self.addBlock(CBDA)
+        self.addBlock(SIN)
+
         self.addBlock(TimeBlock("time"))
         self.addBlock(IntegratorBlock("integrator"))
         self.addBlock(ConstantBlock(block_name="ic", value=0))
 
         self.addBlock(AdderBlock(block_name="minus"))
-        self.addBlock(InverterBlock(block_name="inverted"))
+        #self.addBlock(InverterBlock(block_name="inverted"))
 
         # Connect them together
-        self.addConnection("time", "sin", output_port_name='OUT1', input_port_name='IN1')
+        #self.addConnection("time", "integrator")
+        #self.addConnection("ic", "integrator", input_port_name="IC")
+
+        self.addConnection("SinGen", "minus")
+        self.addConnection("CBDA", "minus")
+        #self.addConnection("minus", "integrator")
+        self.addConnection("minus", "OUT1")
+
+
+
+
+
+
+
+
+
+
+        '''self.addConnection("time", "sin", output_port_name='OUT1', input_port_name='IN1')
         self.addConnection("ic", "integrator", input_port_name="IC")
         self.addConnection("sin", "OUT1", output_port_name='OUT1')
 
-
-        self.addConnection("integrator", "OUT1")
+        self.addConnection("integrator", "OUT1")'''
 
 def setUp(blockname):
     cbd = CBD(blockname)
@@ -104,7 +123,7 @@ if __name__ == '__main__':
     simplePlot(x, y)
 
     # ErrorA
-    errA = errorA()
+    errA = errorA(cbda, sin)
     x, y = run(errA, 10, 0.1)
     simplePlot(x, y)
 
