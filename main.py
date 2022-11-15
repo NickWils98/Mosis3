@@ -48,44 +48,52 @@ class SinGen(CBD):
         self.addConnection("sin", "OUT1", output_port_name='OUT1')
 
 class errorA(CBD):
-    def __init__(self, CBDA, SIN,  name="ErrorA"):
+    def __init__(self,  name="ErrorA"):
         CBD.__init__(self, name, input_ports=[], output_ports=["OUT1"])
-        # Sin
-        # Add the 't' and "sin" parameter
-        self.addBlock(CBDA)
-        self.addBlock(SIN)
+        errorA_cbda = CBDA()
+        errorA_sin = SinGen()
 
-        # self.addBlock(TimeBlock("time"))
+        # Add all blocks
+        self.addBlock(errorA_cbda)
+        self.addBlock(errorA_sin)
         self.addBlock(IntegratorBlock("integrator"))
         self.addBlock(ConstantBlock(block_name="ic", value=0))
-
         self.addBlock(AdderBlock(block_name="minus"))
-        # self.addBlock(InverterBlock(block_name="inverted"))
+        self.addBlock(NegatorBlock(block_name="negator"))
+        self.addBlock(AbsBlock(block_name="absolute"))
 
         # Connect them together
-        # self.addConnection("time", "integrator")
         self.addConnection("ic", "integrator", input_port_name="IC")
-
-        self.addConnection("CBDA", "minus", input_port_name="IN1", output_port_name="OUT1")
-        self.addConnection("SinGen", "minus", input_port_name="IN2", output_port_name="OUT1")
-
-        self.addConnection("minus", "integrator", input_port_name="IN1", output_port_name="OUT1")
+        self.addConnection("CBDA", "negator", input_port_name="IN1", output_port_name="OUT1")
+        self.addConnection("SinGen", "minus", input_port_name="IN1", output_port_name="OUT1")
+        self.addConnection("negator", "minus", input_port_name="IN2", output_port_name="OUT1")
+        self.addConnection("minus", "absolute", input_port_name="IN1", output_port_name="OUT1")
+        self.addConnection("absolute", "integrator", input_port_name="IN1", output_port_name="OUT1")
         self.addConnection("integrator", "OUT1")
 
+class errorB(CBD):
+    def __init__(self,  name="ErrorA"):
+        CBD.__init__(self, name, input_ports=[], output_ports=["OUT1"])
+        errorB_cbdb = CBDB()
+        errorB_sin = SinGen()
 
+        # Add all blocks
+        self.addBlock(errorB_cbdb)
+        self.addBlock(errorB_sin)
+        self.addBlock(IntegratorBlock("integrator"))
+        self.addBlock(ConstantBlock(block_name="ic", value=0))
+        self.addBlock(AdderBlock(block_name="minus"))
+        self.addBlock(NegatorBlock(block_name="negator"))
+        self.addBlock(AbsBlock(block_name="absolute"))
 
-
-
-
-
-
-
-
-        '''self.addConnection("time", "sin", output_port_name='OUT1', input_port_name='IN1')
+        # Connect them together
         self.addConnection("ic", "integrator", input_port_name="IC")
-        self.addConnection("sin", "OUT1", output_port_name='OUT1')
-
-        self.addConnection("integrator", "OUT1")'''
+        self.addConnection("CBDB", "negator", input_port_name="IN1", output_port_name="OUT1")
+        self.addConnection("SinGen", "minus", input_port_name="IN1", output_port_name="OUT1")
+        self.addConnection("negator", "minus", input_port_name="IN2", output_port_name="OUT1")
+        self.addConnection("minus", "absolute", input_port_name="IN1", output_port_name="OUT1")
+        self.addConnection("absolute", "integrator", input_port_name="IN1", output_port_name="OUT1")
+        self.addConnection("integrator", "OUT1")
 
 def setUp(blockname):
     cbd = CBD(blockname)
@@ -110,25 +118,28 @@ def simplePlot(x, y):
 if __name__ == '__main__':
     # CBDA
     cbda = CBDA()
-    x, y = run(cbda, 10, 0.1)
-    simplePlot(x, y)
+    #x, y = run(cbda, 10, 0.1)
+    #simplePlot(x, y)
 
     # CBDB
     cbdb = CBDB()
-    x, y = run(cbdb, 10, 0.1)
-    simplePlot(x, y)
+    #x, y = run(cbdb, 10, 0.1)
+    #simplePlot(x, y)
 
     # Sin(t)
     sin = SinGen()
-    x, y = run(sin, 10, 0.1)
-    simplePlot(x, y)
+    #x, y = run(sin, 10, 0.1)
+    #simplePlot(x, y)
 
     # ErrorA
-    errorA_cbda = CBDA()
-    errorA_singen = SinGen()
-    errA = errorA(errorA_cbda, errorA_singen)
-    x, y = run(errA, 10, 0.1)
+    errA = errorA()
+    x, y = run(errA, 50, 0.001)
     simplePlot(x, y)
+
+    # ErrorB
+    errB = errorB()
+    #x, y = run(errB, 50, 0.001)
+    #simplePlot(x, y)
 
 
 
