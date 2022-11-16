@@ -27,13 +27,13 @@ class CBDB(CBD):
 
         # Create the blocks
         self.addBlock(TimeBlock("time"))
-        self.addBlock(DerivatorBlock("integrator"))
+        self.addBlock(DerivatorBlock("derivator"))
         self.addBlock(ConstantBlock(block_name="ic", value=0))
 
         # Connect the blocks
-        self.addConnection("time", "integrator")
-        self.addConnection("ic", "integrator", input_port_name="IC")
-        self.addConnection("integrator", "OUT1")
+        self.addConnection("time", "derivator")
+        self.addConnection("ic", "derivator", input_port_name="IC")
+        self.addConnection("derivator", "OUT1")
 
 class SinGen(CBD):
     def __init__(self, name="SinGen"):
@@ -99,8 +99,9 @@ def setUp(blockname):
     cbd = CBD(blockname)
     return cbd
 
-def run(cbd, num_steps=1, delta_t=1.0):
+def run(cbd, num_steps, delta_t):
     sim = Simulator(cbd)
+    print(delta_t)
     sim.setDeltaT(delta_t)
     sim.run(num_steps)
 
@@ -108,38 +109,42 @@ def run(cbd, num_steps=1, delta_t=1.0):
     x, y = [x for x, _ in data], [y for _, y in data]
     return x, y
 
-def simplePlot(x, y):
+def simplePlot(x, y, title):
     plt.plot(x, y)
     plt.xlabel("Time")
     plt.ylabel("Value")
+    plt.title(title)
     plt.show()
 
 
 if __name__ == '__main__':
     # CBDA
     cbda = CBDA()
-    #x, y = run(cbda, 10, 0.1)
-    #simplePlot(x, y)
+    #delta=0.001
+    #x, y = run(cbda, 10, delta)
+    #simplePlot(x, y, f"CBDA, delta={delta}")
 
     # CBDB
     cbdb = CBDB()
-    #x, y = run(cbdb, 10, 0.1)
-    #simplePlot(x, y)
+    #delta = 0.1
+    #x, y = run(cbdb, 10, delta)
+    #simplePlot(x, y, f"CBDB, delta={delta}")
 
     # Sin(t)
     sin = SinGen()
-    #x, y = run(sin, 10, 0.1)
-    #simplePlot(x, y)
+    delta = 0.001
+    x, y = run(sin, 10, delta)
+    simplePlot(x, y, f"SIN, delta={delta}")
 
     # ErrorA
-    errA = errorA()
-    x, y = run(errA, 50, 0.001)
-    simplePlot(x, y)
+    #errA = errorA()
+    #x, y = run(errA, 50, 0.001)
+    #simplePlot(x, y, "ErrorA")
 
     # ErrorB
-    errB = errorB()
-    #x, y = run(errB, 50, 0.001)
-    #simplePlot(x, y)
+    #errB = errorB()
+    #x, y = run(errB, 50, 0.1)
+    #simplePlot(x, y, "ErrorB")
 
 
 
