@@ -44,7 +44,7 @@ class SinGen(CBD):
         self.addBlock(GenericBlock("sin", block_operator="sin"))
 
         # Connect them together
-        self.addConnection("time", "sin", output_port_name='OUT1', input_port_name='IN1')
+        self.addConnection("time", "sin", input_port_name='IN1', output_port_name='OUT1')
         self.addConnection("sin", "OUT1", output_port_name='OUT1')
 
 class errorA(CBD):
@@ -95,21 +95,14 @@ class errorB(CBD):
         self.addConnection("absolute", "integrator", input_port_name="IN1", output_port_name="OUT1")
         self.addConnection("integrator", "OUT1")
 
-def setUp(blockname):
-    cbd = CBD(blockname)
-    return cbd
-
-def run(cbd, num_steps, delta_t):
+def run(cbd, num_steps, delta_t, title):
     sim = Simulator(cbd)
-    print(delta_t)
     sim.setDeltaT(delta_t)
     sim.run(num_steps)
 
     data = cbd.getSignalHistory('OUT1')
     x, y = [x for x, _ in data], [y for _, y in data]
-    return x, y
 
-def simplePlot(x, y, title):
     plt.plot(x, y)
     plt.xlabel("Time")
     plt.ylabel("Value")
@@ -120,31 +113,28 @@ def simplePlot(x, y, title):
 if __name__ == '__main__':
     # CBDA
     cbda = CBDA()
-    #delta=0.001
-    #x, y = run(cbda, 10, delta)
-    #simplePlot(x, y, f"CBDA, delta={delta}")
+    delta = 0.01
+    #run(cbda, 10, delta, f"delta={delta}")
 
     # CBDB
     cbdb = CBDB()
-    #delta = 0.1
-    #x, y = run(cbdb, 10, delta)
-    #simplePlot(x, y, f"CBDB, delta={delta}")
+    delta = 0.1
+    #run(cbdb, 10, delta, f"delta={delta}")
 
     # Sin(t)
     sin = SinGen()
-    delta = 0.001
-    x, y = run(sin, 10, delta)
-    simplePlot(x, y, f"SIN, delta={delta}")
+    delta = 0.1
+    #run(sin, 10, delta, f"delta={delta}")
 
     # ErrorA
     #errA = errorA()
-    #x, y = run(errA, 50, 0.001)
-    #simplePlot(x, y, "ErrorA")
+    #delta = 0.1
+    #run(errA, 10, delta, f"delta={delta}")
 
     # ErrorB
     #errB = errorB()
-    #x, y = run(errB, 50, 0.1)
-    #simplePlot(x, y, "ErrorB")
+    #delta = 0.1
+    #run(errB, 10, delta, f"delta={delta}")
 
 
 
