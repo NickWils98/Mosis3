@@ -137,33 +137,39 @@ def run(cbd, num_steps, delta_t, title, RKF=False):
 
 
 if __name__ == '__main__':
-    # CBDA
+    # ===============================================CBD_A==============================================================
     cbda = CBDA()
     delta = 0.01
-    rkf45 = transformToRKF(cbda, delta_t=0.01, start_time=1e-4, atol=2e-5, hmin=0.1, safety=0.84)
-    #run(cbda, 10, delta, f"delta={delta}")
-    run(cbd=rkf45, num_steps=10, delta_t=delta, title=f"RKF45 delta={delta}", RKF=True)
+    cbda_rkf45 = transformToRKF(cbda, delta_t=0.01, start_time=1e-4, atol=2e-5, hmin=0.1, safety=0.84)
+    run(cbda, 10, delta, f"CBDA delta={delta}")
+    run(cbd=cbda_rkf45, num_steps=10, delta_t=delta, title=f"CBD_A RKF45 delta={delta}", RKF=True)
 
-    # CBDB
+
+    # ===============================================CBD_B==============================================================
     cbdb = CBDB()
     delta = 0.1
-    #run(cbdb, 10, delta, f"delta={delta}")
+    #run(cbdb, 10, delta, f"CBD B delta={delta}")
 
-    # Sin(t)
+
+    # ================================================SIN===============================================================
     sin = SinGen()
     delta = 0.1
-    #run(sin, 10, delta, f"delta={delta}")
+    #run(sin, 10, delta, f"SIN delta={delta}")
 
-    # ErrorA
+
+    # ===============================================ERR_A==============================================================
     #errA = errorA()
     #delta = 0.1
-    #run(errA, 10, delta, f"delta={delta}")
+    #run(errA, 10, delta, f"ERR A delta={delta}")
 
-    # ErrorB
+
+    # ===============================================ERR_B==============================================================
     #errB = errorB()
     #delta = 0.1
-    #run(errB, 10, delta, f"delta={delta}")
+    #run(errB, 10, delta, f"ERR Bdelta={delta}")
 
+
+    # ==============================================VALIDITY============================================================
     #checkValitidyLatex(cbda)
 
 
