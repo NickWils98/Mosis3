@@ -18,24 +18,18 @@ class CBDA(CBD):
         CBD.__init__(self, name, input_ports=[""], output_ports=["OUT1"])
 
         # Create the blocks
-        self.addBlock(TimeBlock("time"))
         self.addBlock(IntegratorBlock("integrator"))
         self.addBlock(IntegratorBlock("integrator2"))
         self.addBlock(ConstantBlock(block_name="ic", value=0))
         self.addBlock(ConstantBlock(block_name="ic2", value=1))
-        # self.addBlock(NegatorBlock(block_name="negator"))
-        self.addBlock(AdderBlock(block_name="sum"))
+        self.addBlock(NegatorBlock(block_name="negator"))
         # Connect the blocks
-        self.addConnection("time", "integrator")
         self.addConnection("ic", "integrator", input_port_name="IC")
-        self.addConnection("time", "sum")
         self.addConnection("integrator", "integrator2")
-
         self.addConnection("ic2", "integrator2", input_port_name="IC")
-        # self.addConnection("integrator2", "negator")
-        self.addConnection("integrator2", "sum")
-
-        self.addConnection("sum", "OUT1")
+        self.addConnection("integrator2", "negator")
+        self.addConnection("negator", "integrator")
+        self.addConnection("negator", "OUT1")
 
 
 class CBDB(CBD):
@@ -43,16 +37,13 @@ class CBDB(CBD):
         CBD.__init__(self, name, input_ports=[""], output_ports=["OUT1"])
 
         # Create the blocks
-        # self.addBlock(TimeBlock("time"))
         self.addBlock(DerivatorBlock("derivator"))
         self.addBlock(DerivatorBlock("derivator2"))
         self.addBlock(ConstantBlock(block_name="ic", value=1))
         self.addBlock(ConstantBlock(block_name="ic2", value=0))
         self.addBlock(NegatorBlock(block_name="neg"))
 
-
         # Connect the blocks
-        # self.addConnection("time", "derivator")
         self.addConnection("ic", "derivator", input_port_name="IC")
         self.addConnection("derivator", "derivator2")
         self.addConnection("ic2", "derivator2", input_port_name="IC")
@@ -216,13 +207,13 @@ if __name__ == '__main__':
     cbda = CBDA()
     delta = 0.01
     # cbda_rkf45 = transformToRKF(cbda, delta_t=0.01, start_time=1e-4, atol=2e-5, hmin=0.1, safety=0.84)
-    # run(cbda, 10, delta, f"CBDA delta={delta}")
+    run(cbda, 50, delta, f"CBDA delta={delta}")
     # run(cbd=cbda_rkf45, num_steps=10, delta_t=delta, title=f"CBD_A RKF45 delta={delta}", RKF=True)
 
     # ===============================================CBD_B==============================================================
     cbdb = CBDB()
     delta = 0.1
-    run(cbdb, 10, delta, f"CBD B delta={delta}")
+    # run(cbdb, 10, delta, f"CBD B delta={delta}")
 
     # ================================================SIN===============================================================
     sin = SinGen()
