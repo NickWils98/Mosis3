@@ -5,6 +5,10 @@ from CBD.simulator import *
 from CBD.realtime.plotting import PlotManager, LinePlot, follow
 from CBD.simulator import Simulator
 import matplotlib.pyplot as plt
+# Import the latexify core unit
+from CBD.converters.latexify import CBD2Latex
+# OR, ALTERNATIVELY
+from CBD.converters.latexify.CBD2Latex import CBD2Latex
 
 
 class CBDA(CBD):
@@ -95,6 +99,15 @@ class errorB(CBD):
         self.addConnection("absolute", "integrator", input_port_name="IN1", output_port_name="OUT1")
         self.addConnection("integrator", "OUT1")
 
+def checkValitidyLatex(model):
+    cbd2latex = CBD2Latex(model, show_steps=True, render_latex=False)
+
+    cbd2latex.simplify()
+
+    # print the resulting equations
+    print("RESULT IS:")
+    print(cbd2latex.render())
+
 def run(cbd, num_steps, delta_t, title):
     sim = Simulator(cbd)
     sim.setDeltaT(delta_t)
@@ -124,7 +137,7 @@ if __name__ == '__main__':
     # Sin(t)
     sin = SinGen()
     delta = 0.1
-    #run(sin, 10, delta, f"delta={delta}")
+    run(sin, 10, delta, f"delta={delta}")
 
     # ErrorA
     #errA = errorA()
@@ -135,6 +148,8 @@ if __name__ == '__main__':
     #errB = errorB()
     #delta = 0.1
     #run(errB, 10, delta, f"delta={delta}")
+
+    checkValitidyLatex(sin)
 
 
 
