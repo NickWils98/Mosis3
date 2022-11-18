@@ -7,6 +7,8 @@ from CBD.simulator import Simulator
 import matplotlib.pyplot as plt
 # Import the latexify core unit
 from CBD.converters.latexify import CBD2Latex
+from CBD.preprocessing.butcher import ButcherTableau as BT
+from CBD.preprocessing.rungekutta import RKPreprocessor
 # OR, ALTERNATIVELY
 from CBD.converters.latexify.CBD2Latex import CBD2Latex
 
@@ -108,9 +110,19 @@ def checkValitidyLatex(model):
     print("RESULT IS:")
     print(cbd2latex.render())
 
-def run(cbd, num_steps, delta_t, title):
+def transformToRKF(model, delta_t, start_time, atol, hmin, safety):
+    model.addFixedRateClock("clock", delta_t=delta_t, start_time=start_time)
+
+    tableau = BT.RKF45()
+    RKP = RKPreprocessor(tableau, atol=atol, hmin=hmin, safety=safety)
+    new_model = RKP.preprocess(model)
+
+    return new_model
+
+def run(cbd, num_steps, delta_t, title, RKF=False):
     sim = Simulator(cbd)
-    sim.setDeltaT(delta_t)
+    if RKF==False:
+        sim.setDeltaT(delta_t)
     sim.run(num_steps)
 
     data = cbd.getSignalHistory('OUT1')
@@ -123,11 +135,14 @@ def run(cbd, num_steps, delta_t, title):
     plt.show()
 
 
+
 if __name__ == '__main__':
     # CBDA
     cbda = CBDA()
     delta = 0.01
+    rkf45 = transformToRKF(cbda, delta_t=0.01, start_time=1e-4, atol=2e-5, hmin=0.1, safety=0.84)
     #run(cbda, 10, delta, f"delta={delta}")
+    run(cbd=rkf45, num_steps=10, delta_t=delta, title=f"RKF45 delta={delta}", RKF=True)
 
     # CBDB
     cbdb = CBDB()
@@ -137,7 +152,7 @@ if __name__ == '__main__':
     # Sin(t)
     sin = SinGen()
     delta = 0.1
-    run(sin, 10, delta, f"delta={delta}")
+    #run(sin, 10, delta, f"delta={delta}")
 
     # ErrorA
     #errA = errorA()
@@ -149,7 +164,7 @@ if __name__ == '__main__':
     #delta = 0.1
     #run(errB, 10, delta, f"delta={delta}")
 
-    checkValitidyLatex(sin)
+    #checkValitidyLatex(cbda)
 
 
 
