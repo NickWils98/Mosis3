@@ -36,12 +36,10 @@ def multiplePlot():
     deltaList = [0.25, 0.125, 0.1, 0.05]
 
     for delt in deltaList:
-        ####
         x_cords = [0.01 * x for x in range(0, 101)]
         y_cords = [np.exp(x * -15) for x in x_cords]
         analytic = [x_cords, y_cords]
 
-        ###
         yt1 = Yt(integrator=BEM)
         sim1 = Simulator(yt1)
         sim1.setDeltaT(delt)
@@ -49,7 +47,6 @@ def multiplePlot():
         data = yt1.getSignalHistory('OUT1')
         yt1 = [x for x, _ in data], [y for _, y in data]
 
-        ###
         yt2 = Yt(integrator=FEM)
         sim2 = Simulator(yt2)
         sim2.setDeltaT(delt)
@@ -57,7 +54,6 @@ def multiplePlot():
         data = yt2.getSignalHistory('OUT1')
         yt2 = [x for x, _ in data], [y for _, y in data]
 
-        ###
         yt3 = Yt(integrator=TR)
         sim3 = Simulator(yt3)
         sim3.setDeltaT(delt)
@@ -65,14 +61,12 @@ def multiplePlot():
         data = yt3.getSignalHistory('OUT1')
         yt3 = [x for x, _ in data], [y for _, y in data]
 
-        ###
         yt4 = Yt(integrator=SOTR)
         sim4 = Simulator(yt4)
         sim4.setDeltaT(delt)
         sim4.run(1)
         data = yt4.getSignalHistory('OUT1')
         yt4 = [x for x, _ in data], [y for _, y in data]
-
 
         # Plotting both the curves simultaneously
         plt.plot(yt1[0], yt1[1], color='r', label='BEM')
@@ -113,4 +107,5 @@ if __name__ == '__main__':
             yt = Yt(integrator=integrator)
             run(yt, 1, delta, f"{integrator.__name__} Integral of Yt delta = {delta}", filename=f"resc/SSOE/{integrator.__name__}{delta}.png")
 
+    gvDraw(Yt(integrator=integrator), f"resc/SSOE/Yt.gv")
     multiplePlot()
