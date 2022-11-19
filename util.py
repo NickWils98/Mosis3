@@ -1,4 +1,3 @@
-
 from CBD.simulator import Simulator
 import matplotlib.pyplot as plt
 from CBD.converters.latexify.CBD2Latex import CBD2Latex

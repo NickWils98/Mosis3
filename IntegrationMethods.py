@@ -7,15 +7,12 @@ class ForwardEulerMethod(CBD):
     """
     The integrator block is a CBD that calculates the integration.
     The block is implemented according to the forward Euler rule.
-
     Args:
     	block_name (str):   The name of the block.
-
     :Input Ports:
     	- **IN1** -- The input.
     	- **IC** -- The initial condition. I.e., this value is outputted
     	  at iteration 0.
-
     :Output Ports:
     	**OUT1** -- The integral of the input.
     """
@@ -42,15 +39,12 @@ class TrapezoidRule(CBD):
     """
     The integrator block is a CBD that calculates the integration.
     The block is implemented according to the trapezoid rule.
-
     Args:
     	block_name (str):   The name of the block.
-
     :Input Ports:
     	- **IN1** -- The input.
     	- **IC** -- The initial condition. I.e., this value is outputted
     	  at iteration 0.
-
     :Output Ports:
     	**OUT1** -- The integral of the input.
     """
@@ -95,15 +89,12 @@ class SimpsonOneThirdRule(CBD):
     """
     The integrator block is a CBD that calculates the integration.
     The block is implemented according to Simpson's 1/3 rule.
-
     Args:
     	block_name (str):   The name of the block.
-
     :Input Ports:
     	- **IN1** -- The input.
     	- **IC** -- The initial condition. I.e., this value is outputted
     	  at iteration 0.
-
     :Output Ports:
     	**OUT1** -- The integral of the input.
     """
@@ -280,4 +271,3 @@ if __name__ == '__main__':
 
     integrator = SimpsonOneThirdRule("integrator")
     checkValitidyLatex(integrator)
-

@@ -151,6 +151,7 @@ class BasicCBDTestCase(unittest.TestCase):
 		self.CBD.addBlock(ProductBlock(block_name="p"))
 
 		self.CBD.addConnection("c2", "a1")
+		self.CBD.addConnection("c2", "a1")
 		self.CBD.addConnection("p", "a1")
 		self.CBD.addConnection("a1", "p")
 		self.CBD.addConnection("a2", "p")
