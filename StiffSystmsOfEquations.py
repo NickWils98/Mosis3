@@ -18,7 +18,7 @@ class Yt(CBD):
         self.addConnection("minFifteen", "multi", input_port_name="IN2")
         self.addConnection("integrator", "OUT1")
 
-def graph_yt():
+def graph_analitic():
     x_cords = [0.01*x for x in range(0,101)]
     y_cords = [np.exp(x*-15) for x in x_cords]
 
@@ -37,7 +37,7 @@ if __name__ == '__main__':
 
     integratorList = [BEM, FEM, TR, SOTR]
 
-    graph_yt()
+    graph_analitic()
 
     for delta in deltaList:
         for integrator in integratorList:
