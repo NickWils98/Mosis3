@@ -1,5 +1,5 @@
 # Mosis3
-We placed the src map on github, but this of coucrse needs to be replaced with your own build of the original cbd-master library build
+We placed the src map on github, but this of course needs to be replaced with your own build of the original cbd-master library.
 
 The project consist of 3 files:
 - HarmonicOscillator.py: Contains all the models for the harmonic oscillator
