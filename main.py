@@ -119,7 +119,7 @@ def transformToRKF(model, delta_t, start_time, atol, hmin, safety):
 if __name__ == '__main__':
 
     CBDList = [CBDA, CBDB, SinGen, errorA, errorB]
-    deltaList = [0.1, 0.01]
+    deltaList = [0.1, 0.01, 0.001]
 
     for delta in deltaList:
         for CBD2 in CBDList:
