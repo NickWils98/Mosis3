@@ -1,7 +1,6 @@
 from CBD.Core import *
 from CBD.lib.std import *
 from util import *
-from CBD.converters.CBDDraw import gvDraw
 
 
 class ForwardEulerMethod(CBD):
@@ -249,13 +248,13 @@ if __name__ == '__main__':
         for integrator in integratorList:
             print(f"Integrator = {integrator.__name__}", f"Delta = {delta}")
             Gt = IntegralOfGt(integrator, "integrator")
-            run(Gt, 100, delta, f"{integrator.__name__} Integral of Gt delta = {delta}", filename=f"resc/{integrator.__name__}{delta}.png")
+            run(Gt, 100, delta, f"{integrator.__name__} Integral of Gt delta = {delta}", filename=f"resc/IM/{integrator.__name__}{delta}.png")
             print(Gt.getSignalHistory("OUT1")[-1])
     for integratorClass in integratorList:
         print(f"\nIntegrator = {integratorClass.__name__}")
         integrator = integratorClass("integrator")
         checkValitidyLatex(integrator)
-        gvDraw(integrator, f"resc/{integrator.__class__.__name__}.gv")
+        gvDraw(integrator, f"resc/IM/{integrator.__class__.__name__}.gv")
 
 
 

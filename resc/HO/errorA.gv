@@ -1,0 +1,39 @@
+// CBD model of the CBD block
+// Created with CBD.converters.CBDDraw
+digraph model {
+ splines=ortho;
+ label=<<B>CBD (errorA)</B>>;
+ labelloc="t";
+ fontsize=20;
+ rankdir="LR";
+ node_139887695885648 [label="CBDA\n(cbda)", shape=Msquare];
+ inter_139887695885648_OUT1 [shape=point, width=0.01, height=0.01];
+ node_139887695885648 -> inter_139887695885648_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_139887695903808 [label="SinGen\n(sinGen)", shape=Msquare];
+ inter_139887695903808_OUT1 [shape=point, width=0.01, height=0.01];
+ node_139887695903808 -> inter_139887695903808_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_139887695904480 [label="IntegratorBlock\n(integrator)", shape=Msquare];
+ inter_139887695923712_OUT1 -> node_139887695904480 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_139887695923232_OUT1 -> node_139887695904480 [headlabel="IC", arrowhead="normal", arrowtail="none", dir=both];
+ inter_139887695904480_OUT1 [shape=point, width=0.01, height=0.01];
+ node_139887695904480 -> inter_139887695904480_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_139887695923232 [label=" ConstantBlock\n(zero)\n0", shape=ellipse];
+ inter_139887695923232_OUT1 [shape=point, width=0.01, height=0.01];
+ node_139887695923232 -> inter_139887695923232_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_139887695923328 [label="AdderBlock\n(minus)", shape=box];
+ inter_139887695903808_OUT1 -> node_139887695923328 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_139887695923424_OUT1 -> node_139887695923328 [headlabel="IN2", arrowhead="normal", arrowtail="none", dir=both];
+ inter_139887695923328_OUT1 [shape=point, width=0.01, height=0.01];
+ node_139887695923328 -> inter_139887695923328_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_139887695923424 [label="NegatorBlock\n(negate)", shape=box];
+ inter_139887695885648_OUT1 -> node_139887695923424 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_139887695923424_OUT1 [shape=point, width=0.01, height=0.01];
+ node_139887695923424 -> inter_139887695923424_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_139887695923712 [label="AbsBlock\n(absolute)", shape=box];
+ inter_139887695923328_OUT1 -> node_139887695923712 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_139887695923712_OUT1 [shape=point, width=0.01, height=0.01];
+ node_139887695923712 -> inter_139887695923712_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_139887695885744_OUT1 [shape=point, width=0.01, height=0.01];
+ inter_139887695904480_OUT1 -> node_139887695885744_OUT1 [headlabel="OUT1", arrowhead="onormal", arrowtail="none", dir=both];
+
+}

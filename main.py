@@ -4,50 +4,50 @@ from CBD.preprocessing.butcher import ButcherTableau as BT
 from CBD.preprocessing.rungekutta import RKPreprocessor
 from util import *
 
+
 class CBDA(CBD):
-    def __init__(self, name="CBDA"):
-        CBD.__init__(self, name, input_ports=[""], output_ports=["OUT1"])
+    def __init__(self, block_name="cbda"):
+        CBD.__init__(self, block_name, [], ["OUT1"])
 
         # Create the blocks
-        # self.addBlock(forward_euler_method("integrator"))
-        # self.addBlock(forward_euler_method("integrator2"))
         self.addBlock(IntegratorBlock("integrator"))
         self.addBlock(IntegratorBlock("integrator2"))
-        self.addBlock(ConstantBlock(block_name="ic", value=0))
-        self.addBlock(ConstantBlock(block_name="ic2", value=1))
-        self.addBlock(NegatorBlock(block_name="negator"))
+        self.addBlock(ConstantBlock(block_name="zero", value=0))
+        self.addBlock(ConstantBlock(block_name="one", value=1))
+        self.addBlock(NegatorBlock(block_name="negate"))
+
         # Connect the blocks
-        self.addConnection("ic", "integrator", input_port_name="IC")
+        self.addConnection("zero", "integrator", input_port_name="IC")
         self.addConnection("integrator", "integrator2")
-        self.addConnection("ic2", "integrator2", input_port_name="IC")
-        self.addConnection("integrator2", "negator")
-        self.addConnection("negator", "integrator")
-        self.addConnection("negator", "OUT1")
+        self.addConnection("one", "integrator2", input_port_name="IC")
+        self.addConnection("integrator2", "negate")
+        self.addConnection("negate", "integrator")
+        self.addConnection("negate", "OUT1")
 
 
 class CBDB(CBD):
-    def __init__(self, name="CBDB"):
-        CBD.__init__(self, name, input_ports=[""], output_ports=["OUT1"])
+    def __init__(self, block_name="cbdb"):
+        CBD.__init__(self, block_name, input_ports=[], output_ports=["OUT1"])
 
         # Create the blocks
-        self.addBlock(DerivatorBlock("derivator"))
-        self.addBlock(DerivatorBlock("derivator2"))
-        self.addBlock(ConstantBlock(block_name="ic", value=1))
-        self.addBlock(ConstantBlock(block_name="ic2", value=0))
-        self.addBlock(NegatorBlock(block_name="neg"))
+        self.addBlock(DerivatorBlock("derivative"))
+        self.addBlock(DerivatorBlock("derivative2"))
+        self.addBlock(ConstantBlock(block_name="one", value=1))
+        self.addBlock(ConstantBlock(block_name="zero", value=0))
+        self.addBlock(NegatorBlock(block_name="negate"))
 
         # Connect the blocks
-        self.addConnection("ic", "derivator", input_port_name="IC")
-        self.addConnection("derivator", "derivator2")
-        self.addConnection("ic2", "derivator2", input_port_name="IC")
-        self.addConnection("derivator2", "neg")
-        self.addConnection("neg", "derivator")
-        self.addConnection("neg", "OUT1")
+        self.addConnection("one", "derivative", input_port_name="IC")
+        self.addConnection("derivative", "derivative2")
+        self.addConnection("zero", "derivative2", input_port_name="IC")
+        self.addConnection("derivative2", "negate")
+        self.addConnection("negate", "derivative")
+        self.addConnection("negate", "OUT1")
 
 
 class SinGen(CBD):
-    def __init__(self, name="SinGen"):
-        CBD.__init__(self, name, input_ports=[], output_ports=["OUT1"])
+    def __init__(self, block_name="sinGen"):
+        CBD.__init__(self, block_name, input_ports=[], output_ports=["OUT1"])
 
         # Add the 't' parameter
         self.addBlock(TimeBlock("time"))
@@ -61,47 +61,44 @@ class SinGen(CBD):
 class errorA(CBD):
     def __init__(self, name="ErrorA"):
         CBD.__init__(self, name, input_ports=[], output_ports=["OUT1"])
-        errorA_cbda = CBDA()
-        errorA_sin = SinGen()
 
         # Add all blocks
-        self.addBlock(errorA_cbda)
-        self.addBlock(errorA_sin)
+        self.addBlock(CBDA(block_name="cbda"))
+        self.addBlock(SinGen(block_name="sinGen"))
         self.addBlock(IntegratorBlock("integrator"))
-        self.addBlock(ConstantBlock(block_name="ic", value=0))
+        self.addBlock(ConstantBlock(block_name="zero", value=0))
         self.addBlock(AdderBlock(block_name="minus"))
-        self.addBlock(NegatorBlock(block_name="negator"))
+        self.addBlock(NegatorBlock(block_name="negate"))
         self.addBlock(AbsBlock(block_name="absolute"))
 
         # Connect them together
-        self.addConnection("ic", "integrator", input_port_name="IC")
-        self.addConnection("CBDA", "negator", input_port_name="IN1", output_port_name="OUT1")
-        self.addConnection("SinGen", "minus", input_port_name="IN1", output_port_name="OUT1")
-        self.addConnection("negator", "minus", input_port_name="IN2", output_port_name="OUT1")
+        self.addConnection("zero", "integrator", input_port_name="IC")
+        self.addConnection("cbda", "negate", input_port_name="IN1", output_port_name="OUT1")
+        self.addConnection("sinGen", "minus", input_port_name="IN1", output_port_name="OUT1")
+        self.addConnection("negate", "minus", input_port_name="IN2", output_port_name="OUT1")
         self.addConnection("minus", "absolute", input_port_name="IN1", output_port_name="OUT1")
         self.addConnection("absolute", "integrator", input_port_name="IN1", output_port_name="OUT1")
         self.addConnection("integrator", "OUT1")
 
+
 class errorB(CBD):
-    def __init__(self, name="ErrorA"):
-        CBD.__init__(self, name, input_ports=[], output_ports=["OUT1"])
-        errorB_cbdb = CBDB()
-        errorB_sin = SinGen()
+    def __init__(self, block_name="ErrorA"):
+        CBD.__init__(self, block_name, input_ports=[], output_ports=["OUT1"])
 
         # Add all blocks
-        self.addBlock(errorB_cbdb)
-        self.addBlock(errorB_sin)
+        self.addBlock(CBDB("cbdb"))
+        self.addBlock(SinGen("sinGen"))
         self.addBlock(IntegratorBlock("integrator"))
-        self.addBlock(ConstantBlock(block_name="ic", value=0))
+        self.addBlock(ConstantBlock(block_name="zero", value=0))
         self.addBlock(AdderBlock(block_name="minus"))
-        self.addBlock(NegatorBlock(block_name="negator"))
+        self.addBlock(NegatorBlock(block_name="negate"))
         self.addBlock(AbsBlock(block_name="absolute"))
 
         # Connect them together
-        self.addConnection("ic", "integrator", input_port_name="IC")
-        self.addConnection("CBDB", "negator", input_port_name="IN1", output_port_name="OUT1")
-        self.addConnection("SinGen", "minus", input_port_name="IN1", output_port_name="OUT1")
-        self.addConnection("negator", "minus", input_port_name="IN2", output_port_name="OUT1")
+        self.addConnection("zero", "integrator", input_port_name="IC")
+        self.addConnection("cbdb", "negate", input_port_name="IN1", output_port_name="OUT1")
+        self.addConnection("sinGen", "minus", input_port_name="IN1", output_port_name="OUT1")
+        self.addConnection("negate", "minus", input_port_name="IN2", output_port_name="OUT1")
         self.addConnection("minus", "absolute", input_port_name="IN1", output_port_name="OUT1")
         self.addConnection("absolute", "integrator", input_port_name="IN1", output_port_name="OUT1")
         self.addConnection("integrator", "OUT1")
@@ -148,5 +145,11 @@ if __name__ == '__main__':
     # run(errB, 50, delta, f"ERR B delta={delta}")
 
     # ==============================================VALIDITY============================================================
-    checkValitidyLatex(cbda)
+    # checkValitidyLatex(cbda)
 
+    CBDList = [CBDA, CBDB, SinGen,errorA, errorB]
+    for CBD2 in CBDList:
+        print(f"\nIntegrator = {CBD2.__name__}")
+        cbd = CBD2("CBD")
+        # checkValitidyLatex(cbd)
+        gvDraw(cbd, f"resc/HO/{cbd.__class__.__name__}.gv")
