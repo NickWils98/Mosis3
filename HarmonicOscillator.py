@@ -12,14 +12,14 @@ class CBDA(CBD):
         # Create the blocks
         self.addBlock(IntegratorBlock("integrator"))
         self.addBlock(IntegratorBlock("integrator2"))
+        self.addBlock(ConstantBlock(block_name="minus_one", value=-1))
         self.addBlock(ConstantBlock(block_name="zero", value=0))
-        self.addBlock(ConstantBlock(block_name="one", value=1))
         self.addBlock(NegatorBlock(block_name="negate"))
 
         # Connect the blocks
-        self.addConnection("zero", "integrator", input_port_name="IC")
+        self.addConnection("minus_one", "integrator", input_port_name="IC")
         self.addConnection("integrator", "integrator2")
-        self.addConnection("one", "integrator2", input_port_name="IC")
+        self.addConnection("zero", "integrator2", input_port_name="IC")
         self.addConnection("integrator2", "negate")
         self.addConnection("negate", "integrator")
         self.addConnection("negate", "OUT1")
@@ -118,11 +118,13 @@ def transformToRKF(model, delta_t, start_time, atol, hmin, safety):
 
 if __name__ == '__main__':
 
+    multiplePlot(CBDA(), CBDB(), SinGen())
+
     CBDList = [CBDA, CBDB, SinGen, errorA, errorB]
     deltaList = [0.1, 0.01, 0.001, 0.001]
     deltaList = [0.1]
 
-    '''for delta in deltaList:
+    for delta in deltaList:
         for CBD2 in CBDList:
             print(f"CBD = {CBD2.__name__}", f"Delta = {delta}")
             max_time = 10
@@ -138,10 +140,10 @@ if __name__ == '__main__':
     for CBD2 in CBDList:
         print(f"\nCBD validity = {CBD2.__name__}")
         cbd = CBD2()
-        checkValitidyLatex(cbd)'''
+        checkValitidyLatex(cbd)
 
 
-    checkValitidyLatex(errorB())
+    #checkValitidyLatex(errorA())
 
 
     #cbda_rkf45 = transformToRKF(CBDA(), delta_t=0.1, start_time=1e-4, atol=2e-5, hmin=0.1, safety=0.84)
