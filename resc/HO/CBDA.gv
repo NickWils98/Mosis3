@@ -1,0 +1,32 @@
+// CBD model of the CBD block
+// Created with CBD.converters.CBDDraw
+digraph model {
+ splines=ortho;
+ label=<<B>CBD (CBDA)</B>>;
+ labelloc="t";
+ fontsize=20;
+ rankdir="LR";
+ node_4752143600 [label="IntegratorBlock\n(integrator)", shape=Msquare];
+ inter_4765076160_OUT1 -> node_4752143600 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_4765075920_OUT1 -> node_4752143600 [headlabel="IC", arrowhead="normal", arrowtail="none", dir=both];
+ inter_4752143600_OUT1 [shape=point, width=0.01, height=0.01];
+ node_4752143600 -> inter_4752143600_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_4765073616 [label="IntegratorBlock\n(integrator2)", shape=Msquare];
+ inter_4752143600_OUT1 -> node_4765073616 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_4765076016_OUT1 -> node_4765073616 [headlabel="IC", arrowhead="normal", arrowtail="none", dir=both];
+ inter_4765073616_OUT1 [shape=point, width=0.01, height=0.01];
+ node_4765073616 -> inter_4765073616_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_4765075920 [label=" ConstantBlock\n(minus_one)\n-1", shape=ellipse];
+ inter_4765075920_OUT1 [shape=point, width=0.01, height=0.01];
+ node_4765075920 -> inter_4765075920_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_4765076016 [label=" ConstantBlock\n(zero)\n0", shape=ellipse];
+ inter_4765076016_OUT1 [shape=point, width=0.01, height=0.01];
+ node_4765076016 -> inter_4765076016_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_4765076160 [label="NegatorBlock\n(negate)", shape=box];
+ inter_4765073616_OUT1 -> node_4765076160 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_4765076160_OUT1 [shape=point, width=0.01, height=0.01];
+ node_4765076160 -> inter_4765076160_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_4752143792_OUT1 [shape=point, width=0.01, height=0.01];
+ inter_4765076160_OUT1 -> node_4752143792_OUT1 [headlabel="OUT1", arrowhead="onormal", arrowtail="none", dir=both];
+
+}

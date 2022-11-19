@@ -49,11 +49,11 @@ class SinGen(CBD):
     def __init__(self, block_name="sinGen"):
         CBD.__init__(self, block_name, input_ports=[], output_ports=["OUT1"])
 
-        # Add the 't' parameter
+        # Add blocks
         self.addBlock(TimeBlock("time"))
         self.addBlock(GenericBlock("sin", block_operator="sin"))
 
-        # Connect them together
+        # Add connections
         self.addConnection("time", "sin", input_port_name='IN1', output_port_name='OUT1')
         self.addConnection("sin", "OUT1", output_port_name='OUT1')
 
@@ -104,8 +104,6 @@ class errorB(CBD):
         self.addConnection("integrator", "OUT1")
 
 
-
-
 def transformToRKF(model, delta_t, start_time, atol, hmin, safety):
     model.addFixedRateClock("clock", delta_t=delta_t, start_time=start_time)
 
@@ -117,12 +115,10 @@ def transformToRKF(model, delta_t, start_time, atol, hmin, safety):
 
 
 if __name__ == '__main__':
-
-    multiplePlot(CBDA(), CBDB(), SinGen())
+    multiplePlot(CBDA, CBDB, SinGen)
 
     CBDList = [CBDA, CBDB, SinGen, errorA, errorB]
-    deltaList = [0.1, 0.01, 0.001, 0.001]
-    deltaList = [0.1]
+    deltaList = [0.1, 0.01, 0.001]
 
     for delta in deltaList:
         for CBD2 in CBDList:
@@ -137,14 +133,12 @@ if __name__ == '__main__':
         cbd = CBD2("CBD")
         gvDraw(cbd, f"resc/HO/{cbd.__class__.__name__}.gv")
 
-    for CBD2 in CBDList:
-        print(f"\nCBD validity = {CBD2.__name__}")
-        cbd = CBD2()
-        checkValitidyLatex(cbd)
+    # Commented out due to bugs (in library)
+    # for CBD2 in CBDList:
+    #     print(f"\nCBD validity = {CBD2.__name__}")
+    #     cbd = CBD2()
+    #     checkValitidyLatex(cbd)
 
-
-    #checkValitidyLatex(errorA())
-
-
-    #cbda_rkf45 = transformToRKF(CBDA(), delta_t=0.1, start_time=1e-4, atol=2e-5, hmin=0.1, safety=0.84)
-    #run(cbd=cbda_rkf45, num_steps=10, delta_t=0.1, title=f"CBD_A RKF45 delta={0.1}", RKF=True)
+    # Commented out due to bugs (in library)
+    # cbda_rkf45 = transformToRKF(CBDA(), delta_t=0.1, start_time=1e-4, atol=2e-5, hmin=0.1, safety=0.84)
+    # run(cbd=cbda_rkf45, num_steps=10, delta_t=0.1, title=f"CBD_A RKF45 delta={0.1}", RKF=True)

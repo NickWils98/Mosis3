@@ -1,0 +1,32 @@
+// CBD model of the CBD block
+// Created with CBD.converters.CBDDraw
+digraph model {
+ splines=ortho;
+ label=<<B>CBD (CBDB)</B>>;
+ labelloc="t";
+ fontsize=20;
+ rankdir="LR";
+ node_4765077024 [label="DerivatorBlock\n(derivative)", shape=Msquare];
+ inter_4765117120_OUT1 -> node_4765077024 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_4765116880_OUT1 -> node_4765077024 [headlabel="IC", arrowhead="normal", arrowtail="none", dir=both];
+ inter_4765077024_OUT1 [shape=point, width=0.01, height=0.01];
+ node_4765077024 -> inter_4765077024_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_4765092880 [label="DerivatorBlock\n(derivative2)", shape=Msquare];
+ inter_4765077024_OUT1 -> node_4765092880 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_4765116976_OUT1 -> node_4765092880 [headlabel="IC", arrowhead="normal", arrowtail="none", dir=both];
+ inter_4765092880_OUT1 [shape=point, width=0.01, height=0.01];
+ node_4765092880 -> inter_4765092880_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_4765116880 [label=" ConstantBlock\n(one)\n1", shape=ellipse];
+ inter_4765116880_OUT1 [shape=point, width=0.01, height=0.01];
+ node_4765116880 -> inter_4765116880_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_4765116976 [label=" ConstantBlock\n(zero)\n0", shape=ellipse];
+ inter_4765116976_OUT1 [shape=point, width=0.01, height=0.01];
+ node_4765116976 -> inter_4765116976_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_4765117120 [label="NegatorBlock\n(negate)", shape=box];
+ inter_4765092880_OUT1 -> node_4765117120 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_4765117120_OUT1 [shape=point, width=0.01, height=0.01];
+ node_4765117120 -> inter_4765117120_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_4765077120_OUT1 [shape=point, width=0.01, height=0.01];
+ inter_4765117120_OUT1 -> node_4765077120_OUT1 [headlabel="OUT1", arrowhead="onormal", arrowtail="none", dir=both];
+
+}

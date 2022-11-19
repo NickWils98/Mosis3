@@ -1,0 +1,21 @@
+// CBD model of the CBD block
+// Created with CBD.converters.CBDDraw
+digraph model {
+ splines=ortho;
+ label=<<B>CBD (SinGen)</B>>;
+ labelloc="t";
+ fontsize=20;
+ rankdir="LR";
+ node_4765117984 [label="TimeBlock\n(time)", shape=box];
+ inter_4765117984_OUT1 [shape=point, width=0.01, height=0.01];
+ node_4765117984 -> inter_4765117984_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ inter_4765117984_relative [shape=point, width=0.01, height=0.01];
+ node_4765117984 -> inter_4765117984_relative [taillabel="relative", arrowtail="oinv", arrowhead="none", dir=both];
+ node_4765118032 [label=" GenericBlock\n(sin)\nsin", shape=box];
+ inter_4765117984_OUT1 -> node_4765118032 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_4765118032_OUT1 [shape=point, width=0.01, height=0.01];
+ node_4765118032 -> inter_4765118032_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_4765118080_OUT1 [shape=point, width=0.01, height=0.01];
+ inter_4765118032_OUT1 -> node_4765118080_OUT1 [headlabel="OUT1", arrowhead="onormal", arrowtail="none", dir=both];
+
+}
