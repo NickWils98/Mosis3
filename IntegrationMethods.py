@@ -4,18 +4,6 @@ from util import *
 
 
 class ForwardEulerMethod(CBD):
-    """
-    The integrator block is a CBD that calculates the integration.
-    The block is implemented according to the forward Euler rule.
-    Args:
-    	block_name (str):   The name of the block.
-    :Input Ports:
-    	- **IN1** -- The input.
-    	- **IC** -- The initial condition. I.e., this value is outputted
-    	  at iteration 0.
-    :Output Ports:
-    	**OUT1** -- The integral of the input.
-    """
     def __init__(self, block_name="integrator"):
         CBD.__init__(self, block_name, ["IN1", "IC"], ["OUT1"])
 
@@ -34,20 +22,7 @@ class ForwardEulerMethod(CBD):
         self.addConnection("sumState", "delayState", input_port_name="IN1")
         self.addConnection("sumState", "OUT1")
 
-
 class TrapezoidRule(CBD):
-    """
-    The integrator block is a CBD that calculates the integration.
-    The block is implemented according to the trapezoid rule.
-    Args:
-    	block_name (str):   The name of the block.
-    :Input Ports:
-    	- **IN1** -- The input.
-    	- **IC** -- The initial condition. I.e., this value is outputted
-    	  at iteration 0.
-    :Output Ports:
-    	**OUT1** -- The integral of the input.
-    """
     def __init__(self, block_name="integrator"):
         CBD.__init__(self, block_name, ["IN1", "IC"], ["OUT1"])
 
@@ -86,18 +61,6 @@ class TrapezoidRule(CBD):
 
 
 class SimpsonOneThirdRule(CBD):
-    """
-    The integrator block is a CBD that calculates the integration.
-    The block is implemented according to Simpson's 1/3 rule.
-    Args:
-    	block_name (str):   The name of the block.
-    :Input Ports:
-    	- **IN1** -- The input.
-    	- **IC** -- The initial condition. I.e., this value is outputted
-    	  at iteration 0.
-    :Output Ports:
-    	**OUT1** -- The integral of the input.
-    """
     def __init__(self, block_name="integrator"):
         CBD.__init__(self, block_name, ["IN1", "IC"], ["OUT1"])
 
@@ -181,7 +144,6 @@ class SimpsonOneThirdRule(CBD):
         self.addConnection("multTrapezoid", "sumStateTrapezoid")
         self.addConnection("sumStateTrapezoid", "OUT1")
 
-
 class G_t(CBD):
     def __init__(self, block_name="G_T"):
         CBD.__init__(self, block_name, ["IN1"], ["OUT1"])
@@ -203,7 +165,6 @@ class G_t(CBD):
         self.addConnection("invert", "multi")
         self.addConnection("IN1", "multi")
         self.addConnection("multi", "OUT1")
-
 
 class IntegralOfGt(CBD):
     def __init__(self, integrator=IntegratorBlock, block_name="IntegralOfGt"):
@@ -235,6 +196,7 @@ class testGt(CBD):
         self.addConnection("zero", "integrator", input_port_name="IC")
         self.addConnection("integrator", "OUT1")
 
+
 if __name__ == '__main__':
     analytic = 4.60522018
     BEM = IntegratorBlock
@@ -245,31 +207,24 @@ if __name__ == '__main__':
     deltaList = [0.1, 0.01, 0.001]
 
     integratorList = [BEM, FEM, TR, SOTR]
-    end = 100
 
-    # for integrator in integratorList:
-    #     test = testGt(integrator)
-    #     run(test, 5, 1, f"{integrator.__name__} testGt", filename=f"resc/IM/testGt{integrator.__name__}")
+    for integrator in integratorList:
+        test = testGt(integrator)
+        run(test, 5, 1, f"{integrator.__name__} testGt", filename=f"resc/IM/testGt{integrator.__name__}")
 
-    # for delta in deltaList:
-    #     for integrator in integratorList:
-    #         print(f"Integrator = {integrator.__name__}", f"Delta = {delta}")
-    #         Gt = IntegralOfGt(integrator, "integrator")
-    #         # sim = Simulator(Gt)
-    #         # sim.setDeltaT(delta)
-    #         # sim.run(100)
-    #
-    #         run(Gt, 100, delta, f"{integrator.__name__} Integral of Gt delta = {delta}", filename=f"resc/IM/{integrator.__name__}{delta}.png")
-    #         print(Gt.getSignalHistory("OUT1")[-1])
+    for delta in deltaList:
+        for integrator in integratorList:
+            print(f"\nIntegrator = {integrator.__name__}", f"Delta = {delta}")
+            Gt = IntegralOfGt(integrator, "integrator")
+            run(Gt, 100, delta, f"{integrator.__name__} Integral of Gt delta = {delta}", filename=f"resc/IM/{integrator.__name__}{delta}.png")
+            print(Gt.getSignalHistory("OUT1")[-1])
 
-    # for integratorClass in integratorList:
-    #     print(f"\nIntegrator = {integratorClass.__name__}")
-    #     integrator = integratorClass("integrator")
-    #     checkValitidyLatex(integrator)
-        # gvDraw(integrator, f"resc/IM/{integrator.__class__.__name__}.gv")
+    for integratorClass in integratorList:
+        print(f"\nIntegrator = {integratorClass.__name__}")
+        integrator = integratorClass("integrator")
+        checkValitidyLatex(integrator)
+        gvDraw(integrator, f"resc/IM/{integrator.__class__.__name__}.gv")
 
-    # integrator = SimpsonOneThirdRule("integrator")
-    # checkValitidyLatex(integrator)
     gvDraw(G_t(), f"resc/IM/G_t.gv")
 
 

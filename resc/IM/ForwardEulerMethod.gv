@@ -1,0 +1,36 @@
+// CBD model of the integrator block
+// Created with CBD.converters.CBDDraw
+digraph model {
+ splines=ortho;
+ label=<<B>integrator (ForwardEulerMethod)</B>>;
+ labelloc="t";
+ fontsize=20;
+ rankdir="LR";
+ node_5218676352_IN1 [shape=point, width=0.01, height=0.01];
+ inter_5218676352_IN1 [shape=point, width=0.01, height=0.01];
+ node_5218676352_IN1 -> inter_5218676352_IN1 [taillabel="IN1", arrowhead="none", arrowtail="inv", dir=both];
+ node_5218676352_IC [shape=point, width=0.01, height=0.01];
+ inter_5218676352_IC [shape=point, width=0.01, height=0.01];
+ node_5218676352_IC -> inter_5218676352_IC [taillabel="IC", arrowhead="none", arrowtail="inv", dir=both];
+ node_4955335312 [label="DeltaTBlock\n(delta_t)", shape=box];
+ inter_4955335312_OUT1 [shape=point, width=0.01, height=0.01];
+ node_4955335312 -> inter_4955335312_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_11233100992 [label="ProductBlock\n(multDelta)", shape=box];
+ inter_5218676352_IN1 -> node_11233100992 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_4955335312_OUT1 -> node_11233100992 [headlabel="IN2", arrowhead="normal", arrowtail="none", dir=both];
+ inter_11233100992_OUT1 [shape=point, width=0.01, height=0.01];
+ node_11233100992 -> inter_11233100992_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_11233100176 [label="DelayBlock\n(delayState)", shape=box];
+ inter_11233101040_OUT1 -> node_11233100176 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_5218676352_IC -> node_11233100176 [headlabel="IC", arrowhead="normal", arrowtail="none", dir=both];
+ inter_11233100176_OUT1 [shape=point, width=0.01, height=0.01];
+ node_11233100176 -> inter_11233100176_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_11233101040 [label="AdderBlock\n(sumState)", shape=box];
+ inter_11233100992_OUT1 -> node_11233101040 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_11233100176_OUT1 -> node_11233101040 [headlabel="IN2", arrowhead="normal", arrowtail="none", dir=both];
+ inter_11233101040_OUT1 [shape=point, width=0.01, height=0.01];
+ node_11233101040 -> inter_11233101040_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_5218676352_OUT1 [shape=point, width=0.01, height=0.01];
+ inter_11233101040_OUT1 -> node_5218676352_OUT1 [headlabel="OUT1", arrowhead="onormal", arrowtail="none", dir=both];
+
+}

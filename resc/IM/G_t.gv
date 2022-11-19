@@ -1,0 +1,40 @@
+// CBD model of the G_T block
+// Created with CBD.converters.CBDDraw
+digraph model {
+ splines=ortho;
+ label=<<B>G_T (G_t)</B>>;
+ labelloc="t";
+ fontsize=20;
+ rankdir="LR";
+ node_4343972432_IN1 [shape=point, width=0.01, height=0.01];
+ inter_4343972432_IN1 [shape=point, width=0.01, height=0.01];
+ node_4343972432_IN1 -> inter_4343972432_IN1 [taillabel="IN1", arrowhead="none", arrowtail="inv", dir=both];
+ node_4953486000 [label=" ConstantBlock\n(one)\n1", shape=ellipse];
+ inter_4953486000_OUT1 [shape=point, width=0.01, height=0.01];
+ node_4953486000 -> inter_4953486000_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_11493759152 [label=" ConstantBlock\n(two)\n2", shape=ellipse];
+ inter_11493759152_OUT1 [shape=point, width=0.01, height=0.01];
+ node_11493759152 -> inter_11493759152_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_11493759296 [label="PowerBlock\n(power)", shape=box];
+ inter_4343972432_IN1 -> node_11493759296 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_11493759152_OUT1 -> node_11493759296 [headlabel="IN2", arrowhead="normal", arrowtail="none", dir=both];
+ inter_11493759296_OUT1 [shape=point, width=0.01, height=0.01];
+ node_11493759296 -> inter_11493759296_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_11493760400 [label="ProductBlock\n(multi)", shape=box];
+ inter_11493759968_OUT1 -> node_11493760400 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_4343972432_IN1 -> node_11493760400 [headlabel="IN2", arrowhead="normal", arrowtail="none", dir=both];
+ inter_11493760400_OUT1 [shape=point, width=0.01, height=0.01];
+ node_11493760400 -> inter_11493760400_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_11493759968 [label="InverterBlock\n(invert)", shape=box];
+ inter_11493778192_OUT1 -> node_11493759968 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_11493759968_OUT1 [shape=point, width=0.01, height=0.01];
+ node_11493759968 -> inter_11493759968_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_11493778192 [label="AdderBlock\n(sum)", shape=box];
+ inter_11493759296_OUT1 -> node_11493778192 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_4953486000_OUT1 -> node_11493778192 [headlabel="IN2", arrowhead="normal", arrowtail="none", dir=both];
+ inter_11493778192_OUT1 [shape=point, width=0.01, height=0.01];
+ node_11493778192 -> inter_11493778192_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_4343972432_OUT1 [shape=point, width=0.01, height=0.01];
+ inter_11493760400_OUT1 -> node_4343972432_OUT1 [headlabel="OUT1", arrowhead="onormal", arrowtail="none", dir=both];
+
+}

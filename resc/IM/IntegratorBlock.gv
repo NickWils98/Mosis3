@@ -1,0 +1,44 @@
+// CBD model of the integrator block
+// Created with CBD.converters.CBDDraw
+digraph model {
+ splines=ortho;
+ label=<<B>integrator (IntegratorBlock)</B>>;
+ labelloc="t";
+ fontsize=20;
+ rankdir="LR";
+ node_5218693472_IN1 [shape=point, width=0.01, height=0.01];
+ inter_5218693472_IN1 [shape=point, width=0.01, height=0.01];
+ node_5218693472_IN1 -> inter_5218693472_IN1 [taillabel="IN1", arrowhead="none", arrowtail="inv", dir=both];
+ node_5218693472_IC [shape=point, width=0.01, height=0.01];
+ inter_5218693472_IC [shape=point, width=0.01, height=0.01];
+ node_5218693472_IC -> inter_5218693472_IC [taillabel="IC", arrowhead="none", arrowtail="inv", dir=both];
+ node_5218694384 [label=" ConstantBlock\n(zero)\n0", shape=ellipse];
+ inter_5218694384_OUT1 [shape=point, width=0.01, height=0.01];
+ node_5218694384 -> inter_5218694384_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_5218644992 [label="DeltaTBlock\n(delta_t)", shape=box];
+ inter_5218644992_OUT1 [shape=point, width=0.01, height=0.01];
+ node_5218644992 -> inter_5218644992_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_5218204160 [label="DelayBlock\n(delayIn)", shape=box];
+ inter_5218693472_IN1 -> node_5218204160 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_5218694384_OUT1 -> node_5218204160 [headlabel="IC", arrowhead="normal", arrowtail="none", dir=both];
+ inter_5218204160_OUT1 [shape=point, width=0.01, height=0.01];
+ node_5218204160 -> inter_5218204160_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_5219954352 [label="ProductBlock\n(multDelta)", shape=box];
+ inter_5218204160_OUT1 -> node_5219954352 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_5218644992_OUT1 -> node_5219954352 [headlabel="IN2", arrowhead="normal", arrowtail="none", dir=both];
+ inter_5219954352_OUT1 [shape=point, width=0.01, height=0.01];
+ node_5219954352 -> inter_5219954352_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_5219813456 [label="DelayBlock\n(delayState)", shape=box];
+ inter_10778131952_OUT1 -> node_5219813456 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_5218693472_IC -> node_5219813456 [headlabel="IC", arrowhead="normal", arrowtail="none", dir=both];
+ inter_5219813456_OUT1 [shape=point, width=0.01, height=0.01];
+ node_5219813456 -> inter_5219813456_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_10778131952 [label="AdderBlock\n(sumState)", shape=box];
+ inter_5219954352_OUT1 -> node_10778131952 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_5219813456_OUT1 -> node_10778131952 [headlabel="IN2", arrowhead="normal", arrowtail="none", dir=both];
+ inter_10778131952_OUT1 [shape=point, width=0.01, height=0.01];
+ node_10778131952 -> inter_10778131952_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_5218693472_OUT1 [shape=point, width=0.01, height=0.01];
+ inter_10778131952_OUT1 -> node_5218693472_OUT1 [headlabel="OUT1", arrowhead="onormal", arrowtail="none", dir=both];
+
+}
