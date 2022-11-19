@@ -1,0 +1,28 @@
+// CBD model of the yt block
+// Created with CBD.converters.CBDDraw
+digraph model {
+ splines=ortho;
+ label=<<B>yt (Yt)</B>>;
+ labelloc="t";
+ fontsize=20;
+ rankdir="LR";
+ node_4876344816 [label="SimpsonOneThirdRule\n(integrator)", shape=Msquare];
+ inter_4876543024_OUT1 -> node_4876344816 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_4876545280_OUT1 -> node_4876344816 [headlabel="IC", arrowhead="normal", arrowtail="none", dir=both];
+ inter_4876344816_OUT1 [shape=point, width=0.01, height=0.01];
+ node_4876344816 -> inter_4876344816_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_4876543744 [label=" ConstantBlock\n(minFifteen)\n-15", shape=ellipse];
+ inter_4876543744_OUT1 [shape=point, width=0.01, height=0.01];
+ node_4876543744 -> inter_4876543744_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_4876545280 [label=" ConstantBlock\n(one)\n1", shape=ellipse];
+ inter_4876545280_OUT1 [shape=point, width=0.01, height=0.01];
+ node_4876545280 -> inter_4876545280_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_4876543024 [label="ProductBlock\n(multi)", shape=box];
+ inter_4876344816_OUT1 -> node_4876543024 [headlabel="IN1", arrowhead="normal", arrowtail="none", dir=both];
+ inter_4876543744_OUT1 -> node_4876543024 [headlabel="IN2", arrowhead="normal", arrowtail="none", dir=both];
+ inter_4876543024_OUT1 [shape=point, width=0.01, height=0.01];
+ node_4876543024 -> inter_4876543024_OUT1 [taillabel="OUT1", arrowtail="oinv", arrowhead="none", dir=both];
+ node_4878972864_OUT1 [shape=point, width=0.01, height=0.01];
+ inter_4876344816_OUT1 -> node_4878972864_OUT1 [headlabel="OUT1", arrowhead="onormal", arrowtail="none", dir=both];
+
+}
