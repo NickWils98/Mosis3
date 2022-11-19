@@ -117,39 +117,22 @@ def transformToRKF(model, delta_t, start_time, atol, hmin, safety):
 
 
 if __name__ == '__main__':
-    # ===============================================CBD_A==============================================================
-    cbda = CBDA()
-    delta = 0.01
-    # cbda_rkf45 = transformToRKF(cbda, delta_t=0.01, start_time=1e-4, atol=2e-5, hmin=0.1, safety=0.84)
-    # run(cbda, 50, delta, f"CBDA delta={delta}")
-    # run(cbd=cbda_rkf45, num_steps=10, delta_t=delta, title=f"CBD_A RKF45 delta={delta}", RKF=True)
 
-    # ===============================================CBD_B==============================================================
-    cbdb = CBDB()
-    delta = 0.01
-    # run(cbdb, 50, delta, f"CBD B delta={delta}")
+    CBDList = [CBDA, CBDB, SinGen, errorA, errorB]
+    deltaList = [0.1, 0.01]
 
-    # ================================================SIN===============================================================
-    sin = SinGen()
-    delta = 0.1
-    # run(sin, 50, delta, f"SIN delta={delta}")
+    for delta in deltaList:
+        for CBD2 in CBDList:
+            print(f"CBD = {CBD2.__name__}", f"Delta = {delta}")
+            max_time = 10
+            if CBD2 in [errorA, errorB]:
+                max_time = 50
+            run(CBD2(), max_time, delta, f"{CBD2.__name__} with delta={delta}", filename=f"resc/HO/{CBD2.__name__}{delta}.png")
 
-    # ===============================================ERR_A==============================================================
-    errA = errorA()
-    delta = 0.01
-    # run(errA, 50, delta, f"ERR A delta={delta}")
-
-    # ===============================================ERR_B==============================================================
-    errB = errorB()
-    delta = 0.01
-    # run(errB, 50, delta, f"ERR B delta={delta}")
-
-    # ==============================================VALIDITY============================================================
-    # checkValitidyLatex(cbda)
-
-    CBDList = [CBDA, CBDB, SinGen,errorA, errorB]
     for CBD2 in CBDList:
         print(f"\nIntegrator = {CBD2.__name__}")
         cbd = CBD2("CBD")
-        # checkValitidyLatex(cbd)
         gvDraw(cbd, f"resc/HO/{cbd.__class__.__name__}.gv")
+
+    # cbda_rkf45 = transformToRKF(cbda, delta_t=0.01, start_time=1e-4, atol=2e-5, hmin=0.1, safety=0.84)
+    # run(cbd=cbda_rkf45, num_steps=10, delta_t=delta, title=f"CBD_A RKF45 delta={delta}", RKF=True)

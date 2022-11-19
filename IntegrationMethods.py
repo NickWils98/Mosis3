@@ -239,11 +239,10 @@ if __name__ == '__main__':
     TR = TrapezoidRule
     SOTR = SimpsonOneThirdRule
 
-    deltaList = [0.1, 0.01]
+    deltaList = [0.1, 0.01, 0.001]
     integratorList = [BEM, FEM, TR, SOTR]
     end = 100
 
-    # delta = 1
     for delta in deltaList:
         for integrator in integratorList:
             print(f"Integrator = {integrator.__name__}", f"Delta = {delta}")
