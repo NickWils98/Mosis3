@@ -183,7 +183,7 @@ class SimpsonOneThirdRule(CBD):
 
 
 class G_t(CBD):
-    def __init__(self, block_name):
+    def __init__(self, block_name="G_T"):
         CBD.__init__(self, block_name, ["IN1"], ["OUT1"])
 
         # Add all blocks
@@ -245,7 +245,6 @@ if __name__ == '__main__':
     deltaList = [0.1, 0.01, 0.001]
 
     integratorList = [BEM, FEM, TR, SOTR]
-    integratorList = [SOTR]
     end = 100
 
     # for integrator in integratorList:
@@ -269,5 +268,8 @@ if __name__ == '__main__':
     #     checkValitidyLatex(integrator)
         # gvDraw(integrator, f"resc/IM/{integrator.__class__.__name__}.gv")
 
-    integrator = SimpsonOneThirdRule("integrator")
-    checkValitidyLatex(integrator)
+    # integrator = SimpsonOneThirdRule("integrator")
+    # checkValitidyLatex(integrator)
+    gvDraw(G_t(), f"resc/IM/G_t.gv")
+
+
