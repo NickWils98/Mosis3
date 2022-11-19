@@ -23,7 +23,6 @@ class ForwardEulerMethod(CBD):
         CBD.__init__(self, block_name, ["IN1", "IC"], ["OUT1"])
 
         # Add all blocks
-        self.addBlock(ConstantBlock(block_name="zero", value=0))
         self.addBlock(DeltaTBlock(block_name="delta_t"))
         self.addBlock(ProductBlock(block_name="multDelta"))
         self.addBlock(DelayBlock(block_name="delayState"))
@@ -231,6 +230,19 @@ class IntegralOfGt(CBD):
         self.addConnection("gt", "integrator")
         self.addConnection("integrator", "OUT1")
 
+class testGt(CBD):
+    def __init__(self, integrator=IntegratorBlock, block_name="IntegralOfGt"):
+        CBD.__init__(self, block_name, [], ["OUT1"])
+
+        # Add all blocks
+        self.addBlock(TimeBlock(block_name="time"))
+        self.addBlock(integrator(block_name="integrator"))
+        self.addBlock(ConstantBlock(block_name="zero", value=0))
+
+        # Connect them together
+        self.addConnection("time", "integrator")
+        self.addConnection("zero", "integrator", input_port_name="IC")
+        self.addConnection("integrator", "OUT1")
 
 if __name__ == '__main__':
     analytic = 4.60522018
@@ -240,20 +252,32 @@ if __name__ == '__main__':
     SOTR = SimpsonOneThirdRule
 
     deltaList = [0.1, 0.01, 0.001]
+
     integratorList = [BEM, FEM, TR, SOTR]
+    integratorList = [SOTR]
     end = 100
 
-    for delta in deltaList:
-        for integrator in integratorList:
-            print(f"Integrator = {integrator.__name__}", f"Delta = {delta}")
-            Gt = IntegralOfGt(integrator, "integrator")
-            run(Gt, 100, delta, f"{integrator.__name__} Integral of Gt delta = {delta}", filename=f"resc/IM/{integrator.__name__}{delta}.png")
-            print(Gt.getSignalHistory("OUT1")[-1])
-    for integratorClass in integratorList:
-        print(f"\nIntegrator = {integratorClass.__name__}")
-        integrator = integratorClass("integrator")
-        checkValitidyLatex(integrator)
-        gvDraw(integrator, f"resc/IM/{integrator.__class__.__name__}.gv")
+    # for integrator in integratorList:
+    #     test = testGt(integrator)
+    #     run(test, 5, 1, f"{integrator.__name__} testGt", filename=f"resc/IM/testGt{integrator.__name__}")
 
+    # for delta in deltaList:
+    #     for integrator in integratorList:
+    #         print(f"Integrator = {integrator.__name__}", f"Delta = {delta}")
+    #         Gt = IntegralOfGt(integrator, "integrator")
+    #         # sim = Simulator(Gt)
+    #         # sim.setDeltaT(delta)
+    #         # sim.run(100)
+    #
+    #         run(Gt, 100, delta, f"{integrator.__name__} Integral of Gt delta = {delta}", filename=f"resc/IM/{integrator.__name__}{delta}.png")
+    #         print(Gt.getSignalHistory("OUT1")[-1])
 
+    # for integratorClass in integratorList:
+    #     print(f"\nIntegrator = {integratorClass.__name__}")
+    #     integrator = integratorClass("integrator")
+    #     checkValitidyLatex(integrator)
+        # gvDraw(integrator, f"resc/IM/{integrator.__class__.__name__}.gv")
+
+    integrator = SimpsonOneThirdRule("integrator")
+    checkValitidyLatex(integrator)
 

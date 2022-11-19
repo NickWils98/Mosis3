@@ -32,3 +32,4 @@ def run(cbd, num_steps, delta_t, title, RKF=False, filename=None):
         plt.show()
     else:
         plt.savefig(filename)
+        plt.show()
