@@ -304,12 +304,12 @@ class G_t(CBD):
 class testG_t(CBD):
     def __init__(self, block_name="testgt"):
         CBD.__init__(self, block_name, [], ["OUT1"])
-        # self.addBlock(TimeBlock(block_name="time"))
-        self.addBlock(IntegratorBlock(block_name="integrator"))
+        self.addBlock(TimeBlock(block_name="time"))
+        self.addBlock(trapezoid_rule(block_name="integrator"))
         self.addBlock(G_t(block_name="gt"))
         self.addBlock(ConstantBlock(block_name="const", value=0))
 
-        self.addConnection("integrator", "gt")
+        self.addConnection("time", "gt")
         self.addConnection("const", "integrator", input_port_name="IC")
         self.addConnection("gt", "integrator")
         self.addConnection("integrator", "OUT1")
@@ -389,3 +389,7 @@ if __name__ == '__main__':
     gt = testG_t()
     delta = 1
     run(gt, 100, delta, f"gt")
+    print(gt.getSignalHistory("OUT1"))
+    # from CBD.converters.CBDDraw import gvDraw
+    # tes = simpson_1_3_rule("sim")
+    # gvDraw(tes, "test.gv")
